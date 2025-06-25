@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+/fastapi-postgres-docker
+
+# VS Code settings
+.vscode/
+
+# Distribution / packaging
+
+dist/
+*.egg-info/
+
+# Environment variables
+.env
+
+.DS_Store
+
+# MyPy
+.mypy_cache/
+
+# Docker
+*.log
+*.pid
+docker-compose.override.yml
+*.db
+postgres_data/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+.cache
+.pytest_cache/
