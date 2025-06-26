@@ -5,3 +5,5 @@ class Problem(BaseModel):
     lc_num: int
     problem_name: str
     problem_solution: str
+    category_id: int
+    approach_id: int 
