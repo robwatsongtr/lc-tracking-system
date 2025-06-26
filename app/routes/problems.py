@@ -8,4 +8,5 @@ router = APIRouter(prefix="/problems", tags=["problems"])
 async def get_problems():
     query = "SELECT id, lc_num, problem_name, problem_solution FROM problems"
     rows = await database.fetch_all(query)
+    # The ** is used to unpack a dictionary into keyword arguments.
     return [Problem(**row) for row in rows]
