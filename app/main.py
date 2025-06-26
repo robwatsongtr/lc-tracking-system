@@ -1,10 +1,7 @@
 from fastapi import FastAPI
-from databases import Database
-import os
+from app.db import database
 from contextlib import asynccontextmanager
-
-DATABASE_URL = os.getenv("DATABASE_URL")
-database = Database(DATABASE_URL)
+from app.routes import problems
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -14,10 +11,10 @@ async def lifespan(app: FastAPI):
     finally:
         await database.disconnect()
 
-app = FastAPI(lifespan=lifespan)
+# Swagger UI at http://localhost:8000/docs
+app = FastAPI(
+    lifespan=lifespan, 
+    title="Leetcode Problem Tracker API", 
+)
 
-@app.get("/")
-async def read_root():
-    query = "SELECT now()"
-    current_time = await database.fetch_val(query)
-    return {"message": "Hello, FastAPI with Postgres!", "time": str(current_time)}
+app.include_router(problems.router)
