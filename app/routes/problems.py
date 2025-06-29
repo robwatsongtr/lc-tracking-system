@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.db import database
-from app.models.pydantic_models import Problem
+from app.models.Problem import Problem
 
 router = APIRouter(prefix="/problems", tags=["problems"])
 
