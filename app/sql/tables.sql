@@ -9,17 +9,18 @@ CREATE TABLE problems (
     CONSTRAINT fk_approach
         FOREIGN KEY (approach_id)
         REFERENCES approach (id)
-        ON DELETE SET NULL
+        ON DELETE SET NULL,
     CONSTRAINT fk_difficulty
         FOREIGN KEY (diff_id)
         REFERENCES difficulty (id)
-        ON DELETE SET NULL;
+        ON DELETE SET NULL
 );
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     category_name VARCHAR(100) UNIQUE
 );
+
 
 CREATE TABLE approach (
     id SERIAL PRIMARY KEY,
