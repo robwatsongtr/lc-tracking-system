@@ -6,7 +6,7 @@ from routes import problems
 # from app.routes import categories
 
 # To connect to psql in docker:
-# docker exec -it fastapi-postgres-docker-db-1 psql -U fastapi_user -d fastapi_db
+# docker exec -it lc-tracking-system-db-1 psql -U fastapi_user -d fastapi_db
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

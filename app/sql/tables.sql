@@ -16,18 +16,29 @@ CREATE TABLE problems (
         ON DELETE SET NULL
 );
 
+/*
+INSERT INTO categories (category_name) 
+VALUES ('Array'), ('String'), ('Hash Map'), ('Intervals');
+*/
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     category_name VARCHAR(100) UNIQUE
 );
 
-
+/*
+INSERT INTO approach (approach_name) 
+VALUES ('Two-Pointer'), ('Sliding Window'), ('Frequendy Counter'), 
+('Hash Map lookup'), ('Boyer-Moore'),('BFS');
+*/
 CREATE TABLE approach (
     id SERIAL PRIMARY KEY,
     approach_name VARCHAR(100)
 );
 
--- INSERT INTO difficulty (diff_level) VALUES ('Easy'), ('Medium'), ('Hard');
+/*
+INSERT INTO difficulty (diff_level) 
+VALUES ('Easy'), ('Medium'), ('Hard');
+*/
 CREATE TABLE difficulty (
     id SERIAL PRIMARY KEY,
     diff_level VARCHAR(20) UNIQUE
