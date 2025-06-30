@@ -13,7 +13,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5433:5432"  # Changed host port from 5432 to 5433
 
   web:
     build: .
@@ -23,6 +23,8 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgres://fastapi_user:fastapi_pass@db:5432/fastapi_db
+      # Keep container's internal port 5432 in URL because 'db' service is on Docker network
 
 volumes:
   postgres_data:
+

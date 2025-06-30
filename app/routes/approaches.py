@@ -1,4 +1,4 @@
 from fastapi import APIRouter
-from app.models.Approach import Appproach
+from models.Approach import Approach
 
 router = APIRouter(prefix="/approaches", tags=["approaches"])

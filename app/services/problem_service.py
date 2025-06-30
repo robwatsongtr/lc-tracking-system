@@ -1,5 +1,5 @@
-from app.db import database
-from app.models.Problem import Problem
+from db import database
+from models.Problem import Problem
 
 # 'Read'
 async def list_problems() -> list[Problem]:

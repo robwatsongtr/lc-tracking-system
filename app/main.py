@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from app.db import database
+from db import database
 from contextlib import asynccontextmanager
-from app.routes import problems
+from routes import problems
 # from app.routes import approaches
 # from app.routes import categories
 

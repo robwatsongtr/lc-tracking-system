@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.models.Problem import Problem
+from models.Problem import Problem
 from services import problem_service
 
 router = APIRouter(prefix="/problems", tags=["problems"])
