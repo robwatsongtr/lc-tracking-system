@@ -67,7 +67,6 @@ increment count, else decrement count. Return candidate', 1
 INSERT INTO problem_categories (problem_id, category_id) VALUES (3, 1);
 
 
--- Add Summary Ranges problem. Note no approach.  
 INSERT INTO problems (leetcode_num, problem_name, problem_desc, approach_id, problem_solution, diff_id)
 VALUES (228, 'Summary Ranges', 'You are given a sorted unique integer array nums. A range [a,b] 
 is the set of all integers from a to b (inclusive).Return the smallest sorted list of ranges 
