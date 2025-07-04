@@ -30,15 +30,18 @@ async def list_problems() -> list[Problem]:
             p.problem_solution, p.diff_id, a.approach_name, d.diff_level
     """
     rows = await database.fetch_all(query)
-    result = []
+    response = []
     for row in rows:
+        # convert row into standard dicct 
         row_dict = dict(row)
         # Parse the JSON string into a Python list
         row_dict['categories'] = json.loads(row_dict['categories'])
-        result.append(Problem(**row_dict))
-    return result
+        # repack row back into a Pyndantic dict
+        response.append(Problem(**row_dict))
+    return response
 
 # 'Create'
+
 
 # 'Update'
 
