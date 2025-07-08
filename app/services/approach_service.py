@@ -11,3 +11,7 @@ async def list_approaches() -> list[Approach]:
     
     return response 
 
+async def create_approach(approach: Approach) -> Approach:
+    query = """
+        INSERT INTO 
+    """
