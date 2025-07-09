@@ -21,8 +21,8 @@ async def list_problems() -> list[Problem]:
                 CAST('[]' AS json)
             ) AS categories
         FROM problems p
-        JOIN approach a ON p.approach_id = a.id
-        JOIN difficulty d ON p.diff_id = d.id
+        JOIN approaches a ON p.approach_id = a.id
+        JOIN difficulties d ON p.diff_id = d.id
         LEFT JOIN problem_categories pc ON pc.problem_id = p.id
         LEFT JOIN categories c ON c.id = pc.category_id
         GROUP BY 

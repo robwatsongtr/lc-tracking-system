@@ -13,11 +13,11 @@ CREATE TABLE problems (
     diff_id INTEGER,
     CONSTRAINT fk_approach
         FOREIGN KEY (approach_id)
-        REFERENCES approach (id)
+        REFERENCES approaches (id)
         ON DELETE SET NULL,
     CONSTRAINT fk_difficulty
         FOREIGN KEY (diff_id)
-        REFERENCES difficulty (id)
+        REFERENCES difficulties (id)
         ON DELETE SET NULL
 );
 
@@ -35,7 +35,7 @@ INSERT INTO approach (approach_name)
 VALUES ('Two-Pointer'), ('Sliding Window'), ('Frequendy Counter'), 
 ('Hash Map lookup'), ('Boyer-Moore'),('BFS');
 */
-CREATE TABLE approach (
+CREATE TABLE approaches (
     id SERIAL PRIMARY KEY,
     approach_name VARCHAR(100)
 );
@@ -44,7 +44,7 @@ CREATE TABLE approach (
 INSERT INTO difficulty (diff_level) 
 VALUES ('Easy'), ('Medium'), ('Hard');
 */
-CREATE TABLE difficulty (
+CREATE TABLE difficulties (
     id SERIAL PRIMARY KEY,
     diff_level VARCHAR(20) UNIQUE
 );
