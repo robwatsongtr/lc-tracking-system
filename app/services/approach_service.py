@@ -11,7 +11,11 @@ async def list_approaches() -> list[Approach]:
     
     return response 
 
-# async def create_approach(approach: Approach) -> Approach:
-#     query = """
-#         INSERT INTO 
-#     """
+async def create_approach(approach: Approach) -> Approach:
+    query = """
+        INSERT INTO approaches (approach_name)
+        VALUES (:approach_name)
+        RETURNING id, approach_name 
+    """
+    row = await database.fetch_one(query, values=approach.model_dump(exclude_unset=True))
+    return Approach(**row)
