@@ -3,7 +3,7 @@ from typing import Optional, List
 from .Category import Category
 
 class Problem(BaseModel):
-    id: int
+    id: Optional[int] = None
     leetcode_num: int
     problem_name: str
     problem_desc: str 

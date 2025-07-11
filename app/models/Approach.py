@@ -1,5 +1,6 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class Approach(BaseModel):
-    id: int
+    id: Optional[int] = None
     approach_name: str

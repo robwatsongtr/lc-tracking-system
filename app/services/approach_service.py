@@ -18,4 +18,6 @@ async def create_approach(approach: Approach) -> Approach:
         RETURNING id, approach_name 
     """
     row = await database.fetch_one(query, values=approach.model_dump(exclude_unset=True))
-    return Approach(**row)
+    response = Approach(**row)
+
+    return response 
