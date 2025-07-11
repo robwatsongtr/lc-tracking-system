@@ -17,7 +17,8 @@ async def create_approach(approach: Approach) -> Approach:
         VALUES (:approach_name)
         RETURNING id, approach_name 
     """
-    row = await database.fetch_one(query, values=approach.model_dump(exclude_unset=True))
+    values = approach.model_dump(exclude_unset=True)
+    row = await database.fetch_one(query, values=values)
     response = Approach(**row)
 
     return response 
