@@ -53,9 +53,13 @@ async def delete_approach_by_id(approach_id: int) -> dict:
         DELETE FROM approaches 
         WHERE id = :id 
     """
-    result = await database.execute(query=query, values=values)
+    row = await database.fetch_one(query=query, values=values)
 
-    if result == 0:
-        raise HTTPException(status_code=404, detail="Item not found")
+    if row is None:
+        raise HTTPException(status_code=404, 
+            detail=f"Approach with id {approach_id} not found"
+        )
+    
+    response = { "message": f"Item {approach_id} deleted successfully" }
 
-    return { "message": f"Item {approach_id} deleted successfully" }
+    return response 
