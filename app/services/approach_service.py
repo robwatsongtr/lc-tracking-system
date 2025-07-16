@@ -59,6 +59,7 @@ async def delete_approach_by_id(approach_id: int) -> dict:
         raise HTTPException(status_code=404, 
             detail=f"Approach with id {approach_id} not found"
         )
+       
     
     response = { "message": f"Item {approach_id} deleted successfully" }
 
