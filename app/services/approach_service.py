@@ -1,6 +1,7 @@
 from db import database
 from models.Approach import Approach
 from fastapi import HTTPException
+from .row_check import row_exists
 
 async def list_approaches() -> list[Approach]:
     query = """
@@ -48,18 +49,17 @@ async def update_approach_by_id(approach_id: int, approach: Approach) -> Approac
     return response 
 
 async def delete_approach_by_id(approach_id: int) -> dict:
-    values={ "id": approach_id }
-    query = """
-        DELETE FROM approaches 
-        WHERE id = :id 
-    """
-    row = await database.fetch_one(query=query, values=values)
-
-    if row is None:
+    exists = await row_exists(approach_id, "approaches")
+    if not exists:
         raise HTTPException(status_code=404, 
             detail=f"Approach with id {approach_id} not found"
         )
-       
+
+    values={ "id": approach_id }
+    query = """
+        DELETE FROM approaches  WHERE id = :id 
+    """
+    await database.execute(query=query, values=values)
     
     response = { "message": f"Item {approach_id} deleted successfully" }
 

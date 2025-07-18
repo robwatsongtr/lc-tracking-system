@@ -1,6 +1,7 @@
 from db import database
 from models.Category import Category
 from fastapi import HTTPException
+from .row_check import row_exists
 
 async def list_categories() -> list[Category]:
     query = """
@@ -43,17 +44,17 @@ async def update_category_by_id(category_id: int, category: Category) -> Categor
     return Category(**row)
 
 async def delete_category_by_id(category_id: int) -> dict:
-    values={ "id": category_id }
-    query = """
-        DELETE FROM categories
-        WHERE id = :id 
-    """
-    row = await database.fetch_one(query=query, values=values)
-    if row is None:
+    exists = await row_exists(category_id, 'categories')
+    if not exists:
         raise HTTPException(status_code=404, 
             detail=f"Category with id {category_id} not found"
         )
-        
+
+    values={ "id": category_id }
+    query = """
+        DELETE FROM categories WHERE id = :id 
+    """
+    await database.execute(query=query, values=values)  
     response = { "message": f"Item {category_id} deleted successfully" }
 
     return response 
