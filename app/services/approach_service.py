@@ -57,7 +57,7 @@ async def delete_approach_by_id(approach_id: int) -> dict:
 
     values={ "id": approach_id }
     query = """
-        DELETE FROM approaches  WHERE id = :id 
+        DELETE FROM approaches WHERE id = :id 
     """
     await database.execute(query=query, values=values)
     
