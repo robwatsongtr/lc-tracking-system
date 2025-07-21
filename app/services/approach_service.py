@@ -48,6 +48,7 @@ async def update_approach_by_id(approach_id: int, approach: Approach) -> Approac
 
     return response 
 
+
 async def delete_approach_by_id(approach_id: int) -> dict:
     exists = await row_exists(approach_id, "approaches")
     if not exists:

@@ -1,6 +1,8 @@
 from db import database
 from models.Problem import Problem
 import json
+from .row_check import row_exists
+from fastapi import HTTPException
 
 # 'Read'
 async def list_problems() -> list[Problem]:
@@ -32,7 +34,7 @@ async def list_problems() -> list[Problem]:
     rows = await database.fetch_all(query)
     response = []
     for row in rows:
-        # convert row into standard dicct 
+        # convert row into standard dict 
         row_dict = dict(row)
         # Parse the JSON string into a Python list
         row_dict['categories'] = json.loads(row_dict['categories'])
@@ -40,10 +42,27 @@ async def list_problems() -> list[Problem]:
         response.append(Problem(**row_dict))
     return response
 
-# 'Create'
+async def create_problem(problem: Problem) -> Problem:
+    pass
 
 
-# 'Update'
+async def update_problem_by_id(problem_id: int, problem: Problem) -> Problem:
+    pass
 
-# 'Delete' 
+
+async def delete_problem_by_id(problem_id: int) -> dict:
+    exists = await row_exists(problem_id, 'categories')
+    if not exists:
+        raise HTTPException(status_code=404, 
+            detail=f"Problem with id {problem_id} not found"
+        )
+
+    values={ "id": problem_id }
+    query = """
+        DELETE FROM problems WHERE id = :id 
+    """
+    await database.execute(query=query, values=values)  
+    response = { "message": f"Item {problem_id} deleted successfully" }
+
+    return response 
 

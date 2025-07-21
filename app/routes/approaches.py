@@ -1,8 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from models.Approach import Approach
 from services import approach_service
 
-router = APIRouter(prefix="/approaches", tags=["approaches"])
+router = APIRouter(prefix="/approaches", tags=["Approaches"])
 
 @router.get("/", response_model=list[Approach])
 async def get_approaches():

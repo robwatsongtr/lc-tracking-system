@@ -13,6 +13,7 @@ async def list_categories() -> list[Category]:
 
     return response
 
+
 async def create_category(category: Category) -> Category:
     query = """
         INSERT INTO categories (category_name)
@@ -23,6 +24,7 @@ async def create_category(category: Category) -> Category:
     row = await database.fetch_one(query, values=values)
 
     return Category(**row)
+
 
 async def update_category_by_id(category_id: int, category: Category) -> Category:
     values = category.model_dump(exclude_unset=True)
@@ -42,6 +44,7 @@ async def update_category_by_id(category_id: int, category: Category) -> Categor
         )
    
     return Category(**row)
+
 
 async def delete_category_by_id(category_id: int) -> dict:
     exists = await row_exists(category_id, 'categories')
