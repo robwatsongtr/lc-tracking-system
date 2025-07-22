@@ -13,4 +13,4 @@ class Problem(BaseModel):
     # foreign fields 
     approach_name: Optional[str]
     diff_level: Optional[str]
-    categories: List[Category]  
+    categories: List[Category] = []

@@ -43,7 +43,36 @@ async def list_problems() -> list[Problem]:
     return response
 
 async def create_problem(problem: Problem) -> Problem:
-    pass
+    values = problem.model_dump(exclude_unset=True)
+    query = """
+        INSERT INTO problems (
+            leetcode_num,
+            problem_name,
+            problem_desc,
+            approach_id,
+            problem_solution,
+            diff_id   
+        )
+        VALUES (
+            :leetcode_num,
+            :problem_name,
+            :problem_desc,
+            :approach_id,
+            :problem_solution,
+            :diff_id
+        )
+        RETURNING 
+            id, 
+            leetcode_num,
+            problem_name,
+            problem_desc,
+            approach_id,
+            problem_solution,
+            diff_id   
+    """
+    row = await database.fetch_one(query, values=values)
+
+    return Problem(**row)
 
 
 async def update_problem_by_id(problem_id: int, problem: Problem) -> Problem:
