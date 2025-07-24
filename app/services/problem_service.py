@@ -1,10 +1,10 @@
 from db import database
 from models.Problem import Problem
 import json
-from .row_check import row_exists
+from .utils import row_exists
+from .utils import build_sql_set_clause
 from fastapi import HTTPException
 
-# 'Read'
 async def list_problems() -> list[Problem]:
     query = """
         SELECT 
@@ -76,11 +76,37 @@ async def create_problem(problem: Problem) -> Problem:
 
 
 async def update_problem_by_id(problem_id: int, problem: Problem) -> Problem:
-    pass
+    values = problem.model_dump(exclude_unset=True)
+    if not values:
+        raise HTTPException(status_code=400, detail="No fields provided to update")
+    
+    values['id'] = problem_id
+    set_clause_str = build_sql_set_clause(values)
+    
+    query = f"""
+        UPDATE problems
+        SET {set_clause_str}
+        WHERE id = :id
+        RETURNING
+            id, 
+            leetcode_num,
+            problem_name,
+            problem_desc,
+            approach_id,
+            problem_solution,
+            diff_id   
+    """
+    row = await database.fetch_one(query=query, values=values)
+    if row is None:
+        raise HTTPException(
+            status_code=404, detail=f"Problem with id {problem_id} not found"
+        )
+    
+    return Problem(**row)
 
 
 async def delete_problem_by_id(problem_id: int) -> dict:
-    exists = await row_exists(problem_id, 'categories')
+    exists = await row_exists(problem_id, 'problems')
     if not exists:
         raise HTTPException(status_code=404, 
             detail=f"Problem with id {problem_id} not found"

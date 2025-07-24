@@ -1,7 +1,7 @@
 from db import database
 from models.Category import Category
 from fastapi import HTTPException
-from .row_check import row_exists
+from .utils import row_exists
 
 async def list_categories() -> list[Category]:
     query = """
@@ -28,9 +28,9 @@ async def create_category(category: Category) -> Category:
 
 async def update_category_by_id(category_id: int, category: Category) -> Category:
     values = category.model_dump(exclude_unset=True)
-    values['id'] = category_id
     if not values:
         raise HTTPException(status_code=400, detail="No fields provided to update")
+    values['id'] = category_id 
     query = """
         UPDATE categories
         SET category_name = :category_name

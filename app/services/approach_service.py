@@ -1,7 +1,7 @@
 from db import database
 from models.Approach import Approach
 from fastapi import HTTPException
-from .row_check import row_exists
+from .utils import row_exists
 
 async def list_approaches() -> list[Approach]:
     query = """
