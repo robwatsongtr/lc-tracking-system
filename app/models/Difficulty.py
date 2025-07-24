@@ -1,7 +1,8 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class Difficulty(BaseModel):
-    id: int
+    id: Optional[int] = None 
     diff_level: str
 
     

@@ -10,7 +10,9 @@ class Problem(BaseModel):
     approach_id: Optional[int] = None
     problem_solution: str
     diff_id: Optional[int] = None
-    # foreign fields 
+    # input only POST insert into JOIN table
+    category_ids: List[int] = []
+    # output foreign fields for GET
     approach_name: Optional[str]
     diff_level: Optional[str]
     categories: List[Category] = []
