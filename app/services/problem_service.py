@@ -40,9 +40,10 @@ async def list_problems() -> list[Problem]:
         row_dict['categories'] = json.loads(row_dict['categories'])
         # repack row back into a Pyndantic dict
         response.append(Problem(**row_dict))
+
     return response
 
-async def create_problem(problem: Problem) -> Problem:
+async def create_problem_with_categories(problem: Problem) -> Problem:
     values = problem.model_dump(exclude_unset=True)
     query = """
         INSERT INTO problems (
@@ -71,18 +72,32 @@ async def create_problem(problem: Problem) -> Problem:
             diff_id   
     """
     row = await database.fetch_one(query, values=values)
+    problem_id = row["id"]
 
-    return Problem(**row)
+    if problem.category_ids:
+        category_inserts = [
+            { "problem_id" : problem_id, "category_id" : category_id }
+            for category_id in problem.category_ids
+        ]
+        await database.execute_many(
+            """
+            INSERT INTO problem_categories (problem_id, category_id)
+            VALUES (:problem_id, :category_id)
+            """,
+            category_inserts
+        )
+
+    return Problem(**row, category_ids=problem.category_ids)
 
 
 async def update_problem_by_id(problem_id: int, problem: Problem) -> Problem:
-    values = problem.model_dump(exclude_unset=True)
+    values = problem.model_dump(exclude={"category_ids"}, exclude_unset=True)
     if not values:
         raise HTTPException(status_code=400, detail="No fields provided to update")
-    
-    values['id'] = problem_id
+    # transfer the provided id into values 
+    values['id'] = problem_id 
     set_clause_str = build_sql_set_clause(values)
-    
+
     query = f"""
         UPDATE problems
         SET {set_clause_str}
@@ -102,7 +117,25 @@ async def update_problem_by_id(problem_id: int, problem: Problem) -> Problem:
             status_code=404, detail=f"Problem with id {problem_id} not found"
         )
     
-    return Problem(**row)
+    # clear out the join table for problem being updated 
+    delete_old_ids_query = "DELETE FROM problem_categories WHERE problem_id = :problem_id"
+    old_ids = { "problem_id" : problem_id }
+    await database.execute(query=delete_old_ids_query, values=old_ids)
+    
+    if problem.category_ids:
+        category_inserts = [
+            { "problem_id" : problem_id, "category_id" : category_id }
+            for category_id in problem.category_ids
+        ]
+        await database.execute_many(
+            """
+            INSERT INTO problem_categories (problem_id, category_id)
+            VALUES (:problem_id, :category_id)
+            """,
+            category_inserts
+        )
+
+    return Problem(**row, category_ids=problem.category_ids)
 
 
 async def delete_problem_by_id(problem_id: int) -> dict:

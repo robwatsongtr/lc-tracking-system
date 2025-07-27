@@ -10,7 +10,7 @@ async def get_problems_handler():
     
 @router.post("/", response_model=Problem)
 async def create_problem_handler(problem: Problem):
-    return await problem_service.create_problem(problem)
+    return await problem_service.create_problem_with_categories(problem)
 
 @router.put("/{problem_id}", response_model=Problem)
 async def update_problem_handler(problem_id: int, problem: Problem):

@@ -61,7 +61,6 @@ async def delete_approach_by_id(approach_id: int) -> dict:
         DELETE FROM approaches WHERE id = :id 
     """
     await database.execute(query=query, values=values)
-    
     response = { "message": f"Item {approach_id} deleted successfully" }
 
     return response 
