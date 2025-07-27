@@ -1,5 +1,6 @@
 from db import database
 from models.Problem import Problem
+from models.ProblemUpdate import ProblemUpdate
 import json
 from .utils import row_exists
 from .utils import build_sql_set_clause
@@ -90,7 +91,7 @@ async def create_problem_with_categories(problem: Problem) -> Problem:
     return Problem(**row, category_ids=problem.category_ids)
 
 
-async def update_problem_by_id(problem_id: int, problem: Problem) -> Problem:
+async def update_problem_by_id(problem_id: int, problem: ProblemUpdate) -> Problem:
     values = problem.model_dump(exclude={"category_ids"}, exclude_unset=True)
     if not values:
         raise HTTPException(status_code=400, detail="No fields provided to update")
@@ -117,23 +118,25 @@ async def update_problem_by_id(problem_id: int, problem: Problem) -> Problem:
             status_code=404, detail=f"Problem with id {problem_id} not found"
         )
     
-    # clear out the join table for problem being updated 
-    delete_old_ids_query = "DELETE FROM problem_categories WHERE problem_id = :problem_id"
-    old_ids = { "problem_id" : problem_id }
-    await database.execute(query=delete_old_ids_query, values=old_ids)
+    if problem.category_ids is not None:
+        # clear existing relationships
+        delete_old_ids_query = "DELETE FROM problem_categories WHERE problem_id = :problem_id"
+        old_ids = { "problem_id" : problem_id }
+        await database.execute(query=delete_old_ids_query, values=old_ids)
     
-    if problem.category_ids:
-        category_inserts = [
-            { "problem_id" : problem_id, "category_id" : category_id }
-            for category_id in problem.category_ids
-        ]
-        await database.execute_many(
-            """
-            INSERT INTO problem_categories (problem_id, category_id)
-            VALUES (:problem_id, :category_id)
-            """,
-            category_inserts
-        )
+        # Insert new relationships if provided
+        if problem.category_ids:
+            category_inserts = [
+                { "problem_id" : problem_id, "category_id" : category_id }
+                for category_id in problem.category_ids
+            ]
+            await database.execute_many(
+                """
+                INSERT INTO problem_categories (problem_id, category_id)
+                VALUES (:problem_id, :category_id)
+                """,
+                category_inserts
+            )
 
     return Problem(**row, category_ids=problem.category_ids)
 
