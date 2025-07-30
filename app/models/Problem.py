@@ -1,9 +1,9 @@
-from pydantic import BaseModel
 from typing import Optional, List
+from pydantic import BaseModel, Field 
 from .Category import Category
 
 class Problem(BaseModel):
-    id: Optional[int] = None
+    id: int
     leetcode_num: Optional[int] = None
     problem_name: Optional[str] = None
     problem_desc: Optional[str] = None 
@@ -11,10 +11,6 @@ class Problem(BaseModel):
     problem_solution: Optional[str] = None
     diff_id: Optional[int] = None
 
-    # input only POST insert into JOIN table
-    category_ids: Optional[List[int]] = []
-
-    # output foreign fields for GET
-    approach_name: Optional[str]
-    diff_level: Optional[str]
-    categories: List[Category] = []
+    approach_name: Optional[str] = None
+    diff_level: Optional[str] = None
+    categories: List[Category] = Field(default_factory=list)

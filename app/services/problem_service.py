@@ -1,6 +1,7 @@
 from db import database
 from models.Problem import Problem
 from models.ProblemUpdate import ProblemUpdate
+from models.ProblemCreate import ProblemCreate
 import json
 from .utils import row_exists
 from .utils import build_sql_set_clause
@@ -44,7 +45,7 @@ async def list_problems() -> list[Problem]:
 
     return response
 
-async def create_problem_with_categories(problem: Problem) -> Problem:
+async def create_problem_with_categories(problem: ProblemCreate) -> Problem:
     values = problem.model_dump(exclude_unset=True)
     query = """
         INSERT INTO problems (
