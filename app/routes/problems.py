@@ -9,6 +9,10 @@ router = APIRouter(prefix="/problems", tags=["Problems"])
 @router.get("/", response_model=list[Problem])
 async def get_problems_handler():
     return await problem_service.list_problems()
+
+@router.get("/{problem_id}", response_model=Problem)
+async def get_problem_by_id_handler(problem_id: int):
+    return await problem_service.get_problem_by_id(problem_id)
     
 @router.post("/", response_model=Problem)
 async def create_problem_handler(problem: ProblemCreate):
