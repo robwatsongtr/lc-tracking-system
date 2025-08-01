@@ -68,7 +68,7 @@ async def get_problem_by_id(problem_id: int) -> Problem:
         JOIN difficulties d ON p.diff_id = d.id
         LEFT JOIN problem_categories pc ON pc.problem_id = p.id
         LEFT JOIN categories c ON c.id = pc.category_id
-        WHERE id = :id
+        WHERE p.id = :id
         GROUP BY 
             p.id, p.leetcode_num, p.problem_desc, p.approach_id, 
             p.problem_solution, p.diff_id, a.approach_name, d.diff_level    
