@@ -20,7 +20,11 @@ async def list_problems() -> list[Problem]:
             a.approach_name AS approach_name,
             d.diff_level AS diff_level,
             COALESCE(
-                json_agg(DISTINCT jsonb_build_object('id', c.id, 'category_name', c.category_name))
+                json_agg(
+                    DISTINCT jsonb_build_object(
+                        'id', c.id, 'category_name', c.category_name
+                    )
+                )
                 FILTER (WHERE c.id IS NOT NULL),
                 CAST('[]' AS json)
             ) AS categories
@@ -59,7 +63,11 @@ async def get_problem_by_id(problem_id: int) -> Problem:
             a.approach_name AS approach_name,
             d.diff_level AS diff_level,
             COALESCE(
-                json_agg(DISTINCT jsonb_build_object('id', c.id, 'category_name', c.category_name))
+                json_agg(
+                    DISTINCT jsonb_build_object(
+                        'id', c.id, 'category_name', c.category_name
+                    )
+                )
                 FILTER (WHERE c.id IS NOT NULL),
                 CAST('[]' AS json)
             ) AS categories
