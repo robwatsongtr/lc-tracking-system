@@ -6,6 +6,8 @@ databases==0.9.0
 fastapi==0.115.13
 h11==0.16.0
 idna==3.10
+Jinja2==3.1.6
+MarkupSafe==3.0.2
 mypy==1.16.1
 mypy_extensions==1.1.0
 pathspec==0.12.1

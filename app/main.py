@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.templating import Jinja2Templates
 from db import database
 from contextlib import asynccontextmanager
 from routes import problems
@@ -21,6 +22,8 @@ app = FastAPI(
     lifespan=lifespan, 
     title="Leetcode Problem Tracker API", 
 )
+
+templates = Jinja2Templates(directory="templates")
 
 app.include_router(problems.router)
 app.include_router(approaches.router)
