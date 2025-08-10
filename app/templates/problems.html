@@ -1,12 +1,92 @@
 <!DOCTYPE html>
-<html>
-<head><title>Problems</title></head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e1e1e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #2e2e2e;
+            text-align: left;
+        }
+        th {
+            background: #2a2a2a;
+            color: #bbbbbb;
+            font-weight: bold;
+        }
+        tr:hover {
+            background: #2e2e2e;
+        }
+        .categories {
+            display: inline-block;
+            background: #333333;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin: 2px;
+            color: #ffffff;
+        }
+        a {
+            color: #64b5f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
 <body>
-<h1>Problems List</h1>
-<ul>
-    {% for problem in problems %}
-        <li>{{ problem.problem_name }} - {{ problem.problem_desc }}</li>
-    {% endfor %}
-</ul>
+    <h1>Problems</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Leetcode Num</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Difficulty</th>
+                <th>Solution</th>
+                <th>Catetories</th>
+                <th>Approach</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for problem in problems %}
+            <tr>
+                <td>{{ problem.leetcode_num }}</td>
+                <td>{{ problem.problem_name }}</td>
+                <td>{{ problem.problem_desc }}</td>
+                <td>{{ problem.diff_level }}</td>
+                <td>{{ problem.problem_solution }}</td>
+                <td>
+                    {% for category in problem.categories %}
+                        <span class="categories">{{ category.category_name }}</span>
+                    {% endfor %}
+                </td>
+                <td>{{ problem.approach_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
