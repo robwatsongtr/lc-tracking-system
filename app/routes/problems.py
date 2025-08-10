@@ -1,32 +1,49 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from models.Problem import Problem
 from models.ProblemCreate import ProblemCreate
 from models.ProblemUpdate import ProblemUpdate
+from fastapi.templating import Jinja2Templates
 from services import problem_service
 
 router = APIRouter(prefix="/problems", tags=["Problems"])
+templates = Jinja2Templates(directory="templates")
 
-@router.get("/", response_model=list[Problem])
+"""
+Template endponts 
+"""
+@router.get("/html", response_model=list[Problem])
+async def get_problems_handler(request: Request):
+    problems = await problem_service.list_problems()
+    return templates.TemplateResponse("problems.html", {
+        "request": request,
+        "problems": problems,
+    })
+
+
+"""
+JSON Endponts 
+"""
+@router.get("/json", response_model=list[Problem])
 async def get_problems_handler():
     return await problem_service.list_problems()
 
 
-@router.get("/{problem_id}", response_model=Problem)
+@router.get("/json/{problem_id}", response_model=Problem)
 async def get_problem_by_id_handler(problem_id: int):
     return await problem_service.get_problem_by_id(problem_id)
 
     
-@router.post("/", response_model=Problem)
+@router.post("/json", response_model=Problem)
 async def create_problem_handler(problem: ProblemCreate):
     return await problem_service.create_problem_with_categories(problem)
 
 
-@router.put("/{problem_id}", response_model=Problem)
+@router.put("/json/{problem_id}", response_model=Problem)
 async def update_problem_handler(problem_id: int, problem: ProblemUpdate):
     return await problem_service.update_problem_by_id(problem_id, problem)
 
 
-@router.delete("/{problem_id}")
+@router.delete("/json/{problem_id}")
 async def delete_problem_handler(problem_id: int):
     return await problem_service.delete_problem_by_id(problem_id)
 

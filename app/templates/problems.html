@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head><title>Problems</title></head>
+<body>
+<h1>Problems List</h1>
+<ul>
+    {% for problem in problems %}
+        <li>{{ problem.problem_name }} - {{ problem.problem_desc }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
