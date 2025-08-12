@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>LeetCode Problem Tracker</h1>
+<div class="centered-container">
+  <p>Navigate to:</p>
+  <ul>
+    <li><a href="{{ url_for('get_problems_handler_html') }}">View Problems List</a></li>
+  </ul>
+</div>
+{% endblock %}

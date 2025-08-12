@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}LeetCode Problem Tracker{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+        }
+        header a {
+            color: white;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+        header a:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 100%;
+            margin: auto;
+        }
+
+        h1 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1e1e1e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #2e2e2e;
+            text-align: left;
+        }
+        th {
+            background: #2a2a2a;
+            color: #bbbbbb;
+            font-weight: bold;
+        }
+        tr:hover {
+            background: #2e2e2e;
+        }
+        .categories {
+            display: inline-block;
+            background: #333333;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin: 2px;
+            color: #ffffff;
+        }
+        a {
+            color: #64b5f6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .centered-container {
+            text-align: center;
+            margin-top: 1em;
+        }
+        .centered-container ul {
+            display: inline-block;
+            text-align: left;  /* keep bullet list left-aligned */
+            padding-left: 1.2em; /* default bullet padding */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('get_problems_handler_html') }}">List Problems</a>
+        <a href="{{ url_for('home') }}">Home</a>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

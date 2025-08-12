@@ -4,15 +4,18 @@ from models.ProblemCreate import ProblemCreate
 from models.ProblemUpdate import ProblemUpdate
 from fastapi.templating import Jinja2Templates
 from services import problem_service
+from fastapi.responses import HTMLResponse
 
 router = APIRouter(prefix="/problems", tags=["Problems"])
 templates = Jinja2Templates(directory="templates")
 
+
+
 """
 Template endponts 
 """
-@router.get("/html", response_model=list[Problem])
-async def get_problems_handler(request: Request):
+@router.get("/html", response_class=HTMLResponse)
+async def get_problems_handler_html(request: Request):
     problems = await problem_service.list_problems()
     return templates.TemplateResponse("problems.html", {
         "request": request,
