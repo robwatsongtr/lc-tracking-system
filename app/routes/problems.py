@@ -12,15 +12,22 @@ templates = Jinja2Templates(directory="templates")
 
 
 """
-Template endponts 
+Template / Form endponts 
 """
 @router.get("/html", response_class=HTMLResponse)
 async def get_problems_handler_html(request: Request):
     problems = await problem_service.list_problems()
-    return templates.TemplateResponse("problems.html", {
+    return templates.TemplateResponse("problems_list.html", {
         "request": request,
         "problems": problems,
     })
+
+@router.get("/form")
+async def create_problem_form_handler(request: Request):
+    form_data = await request.form()
+    data_dict = dict(form_data)
+
+    
 
 
 """
