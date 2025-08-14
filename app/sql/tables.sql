@@ -2,7 +2,6 @@
 CONSTRAINT allows you to give a name (alias) to a constraint. Good for debugging. 
 */
 
-
 CREATE TABLE problems (
     id SERIAL PRIMARY KEY,
     leetcode_num INTEGER,

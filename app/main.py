@@ -6,11 +6,13 @@ from routes import problems
 from routes import approaches
 from routes import categories
 from routes import home 
+from routes import difficulties
 
 # To connect to psql in docker:
 # docker exec -it lc-tracking-system-db-1 psql -U fastapi_user -d fastapi_db
 
 templates = Jinja2Templates(directory="templates")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -31,3 +33,4 @@ app.include_router(problems.router)
 app.include_router(approaches.router)
 app.include_router(categories.router)
 app.include_router(home.router)
+app.include_router(difficulties.router)

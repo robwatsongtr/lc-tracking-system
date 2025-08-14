@@ -1,33 +1,36 @@
 from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse
 from models.Problem import Problem
 from models.ProblemCreate import ProblemCreate
 from models.ProblemUpdate import ProblemUpdate
 from fastapi.templating import Jinja2Templates
 from services import problem_service
-from fastapi.responses import HTMLResponse
+from services import approach_service
+from services import category_service
+from services import difficulty_service
+
 
 router = APIRouter(prefix="/problems", tags=["Problems"])
 templates = Jinja2Templates(directory="templates")
-
-
 
 """
 Template / Form endponts 
 """
 @router.get("/html", response_class=HTMLResponse)
-async def get_problems_handler_html(request: Request):
+async def get_problems_html(request: Request):
     problems = await problem_service.list_problems()
     return templates.TemplateResponse("problems_list.html", {
         "request": request,
         "problems": problems,
     })
 
-@router.get("/form")
-async def create_problem_form_handler(request: Request):
-    form_data = await request.form()
-    data_dict = dict(form_data)
+@router.get("/html/new")
+async def show_problem_form(request: Request):
+    approaches = approach_service.list_approaches()
+    categories = category_service.list_categories()
+    difficulties = difficulty_service.list_difficulties()
 
-    
+
 
 
 """

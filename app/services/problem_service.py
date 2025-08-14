@@ -147,14 +147,18 @@ async def update_problem_by_id(problem_id: int, problem: ProblemUpdate) -> Probl
     # Before running UPDATE, check if row exists
     exists = await row_exists(problem_id, 'problems')
     if not exists:
-        raise HTTPException(status_code=404, detail="Problem with id ... not found")
+        raise HTTPException(status_code=404, 
+            detail="Problem with id {problem_id} not found"
+        )
     
     await database.execute(query=query, values=values)
 
     # handling the problem_categories join table 
     if problem.category_ids is not None:
         # clear existing relationships
-        delete_old_ids_query = "DELETE FROM problem_categories WHERE problem_id = :problem_id"
+        delete_old_ids_query = """
+            DELETE FROM problem_categories WHERE problem_id = :problem_id
+        """
         old_ids = { "problem_id" : problem_id }
         await database.execute(query=delete_old_ids_query, values=old_ids)
     
