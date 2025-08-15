@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from models.Problem import Problem
 from models.ProblemCreate import ProblemCreate
 from models.ProblemUpdate import ProblemUpdate
@@ -19,6 +19,7 @@ Template / Form endponts
 @router.get("/html", response_class=HTMLResponse)
 async def get_problems_html(request: Request):
     problems = await problem_service.list_problems()
+
     return templates.TemplateResponse("problems_list.html", {
         "request": request,
         "problems": problems,
@@ -30,7 +31,26 @@ async def show_problem_form(request: Request):
     categories = category_service.list_categories()
     difficulties = difficulty_service.list_difficulties()
 
+    return templates.TemplateResponse("problems_form.html", {
+        "request": request,
+        "approaches": approaches,
+        "categories": categories,
+        "difficulties": difficulties
+    })
 
+@router.post("/html")
+async def problem_form_handler(request: Request):
+    form_data = await request.form()
+    data_dict = dict(form_data)
+    if "category_ids" in data_dict:
+        data_dict["category_ids"] = [
+            int(cid) for cid in form_data.getlist("category_ids")
+        ]
+
+    problem_to_insert = ProblemCreate(**data_dict)
+    await problem_service.create_problem_with_categories(problem_to_insert)
+
+    return RedirectResponse(url="/html", status_code=303)
 
 
 """
