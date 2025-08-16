@@ -27,9 +27,9 @@ async def get_problems_html(request: Request):
 
 @router.get("/html/new")
 async def show_problem_form(request: Request):
-    approaches = approach_service.list_approaches()
-    categories = category_service.list_categories()
-    difficulties = difficulty_service.list_difficulties()
+    approaches = await approach_service.list_approaches()
+    categories = await category_service.list_categories()
+    difficulties = await difficulty_service.list_difficulties()
 
     return templates.TemplateResponse("problems_form.html", {
         "request": request,

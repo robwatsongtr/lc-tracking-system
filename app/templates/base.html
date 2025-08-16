@@ -81,6 +81,58 @@
             text-align: left;  
             padding-left: 1.2em; 
         }
+        /* Form container */
+        .form-container {
+            max-width: 700px;
+            margin: 20px auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        /* Form Labels */
+        .form-container label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Form Inputs and textareas */
+        .form-container input[type="text"],
+        .form-container input[type="number"],
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: none;
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        /* Form Multi-select height */
+        .form-container select[multiple] {
+            min-height: 80px;
+        }
+
+        /* Form Submit button */
+        .form-container button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #64b5f6;
+            color: #121212;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .form-container button[type="submit"]:hover {
+            background: #42a5f5;
+        }
     </style>
 </head>
 <body>
