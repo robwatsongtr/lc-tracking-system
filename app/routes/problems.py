@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory="templates")
 """
 Template / Form endponts 
 """
-@router.get("/html", response_class=HTMLResponse)
+@router.get("/html", name="get_problems_html")
 async def get_problems_html(request: Request):
     problems = await problem_service.list_problems()
 
@@ -25,7 +25,7 @@ async def get_problems_html(request: Request):
         "problems": problems,
     })
 
-@router.get("/html/new")
+@router.get("/html/new", name="show_problem_form")
 async def show_problem_form(request: Request):
     approaches = await approach_service.list_approaches()
     categories = await category_service.list_categories()
@@ -38,7 +38,7 @@ async def show_problem_form(request: Request):
         "difficulties": difficulties
     })
 
-@router.post("/html")
+@router.post("/html", name="problem_form_handler")
 async def problem_form_handler(request: Request):
     form_data = await request.form()
     data_dict = dict(form_data)
