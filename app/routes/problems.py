@@ -16,14 +16,24 @@ templates = Jinja2Templates(directory="templates")
 """
 Template / Form endponts 
 """
-@router.get("/html", name="get_problems_html")
-async def get_problems_html(request: Request):
+@router.get("/html", name="list_problems_html")
+async def list_problems_html(request: Request):
     problems = await problem_service.list_problems()
 
     return templates.TemplateResponse("problems_list.html", {
         "request": request,
         "problems": problems,
     })
+
+@router.post("/html/{problem_id}", name="delete_problem_html")
+async def delete_problem_html(request: Request, problem_id: int):
+    await problem_service.delete_problem_by_id(problem_id)
+
+    return RedirectResponse(
+        url=request.url_for("list_problems_html"),
+        status_code=303
+    )
+
 
 @router.get("/html/new", name="show_problem_form")
 async def show_problem_form(request: Request):
@@ -50,7 +60,10 @@ async def problem_form_handler(request: Request):
     problem_to_insert = ProblemCreate(**data_dict)
     await problem_service.create_problem_with_categories(problem_to_insert)
 
-    return RedirectResponse(url="/html", status_code=303)
+    return RedirectResponse(
+        url=request.url_for("list_problems_html"),
+        status_code=303
+    )
 
 
 """

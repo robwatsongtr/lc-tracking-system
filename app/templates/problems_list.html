@@ -14,6 +14,7 @@
             <th>Solution</th>
             <th>Categories</th>
             <th>Approach</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -30,6 +31,14 @@
                 {% endfor %}
             </td>
             <td>{{ problem.approach_name }}</td>
+            <td>
+                <form 
+                    method="post" 
+                    action="{{ url_for('delete_problem_html', problem_id=problem.id) }}"
+                >
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
