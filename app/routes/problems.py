@@ -25,8 +25,9 @@ async def list_problems_html(request: Request):
         "problems": problems,
     })
 
-@router.post("/html/{problem_id}", name="delete_problem_html")
-async def delete_problem_html(request: Request, problem_id: int):
+
+@router.post("/html/{problem_id}", name="form_delete_problem")
+async def form_delete_problem(request: Request, problem_id: int):
     await problem_service.delete_problem_by_id(problem_id)
 
     return RedirectResponse(
