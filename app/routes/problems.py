@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import RedirectResponse
 from models.Problem import Problem
 from models.ProblemCreate import ProblemCreate
 from models.ProblemUpdate import ProblemUpdate
@@ -9,12 +9,11 @@ from services import approach_service
 from services import category_service
 from services import difficulty_service
 
-
 router = APIRouter(prefix="/problems", tags=["Problems"])
 templates = Jinja2Templates(directory="templates")
 
 """
-Template / Form endponts 
+Template / Form Endponts 
 """
 @router.get("/html", name="list_problems_html")
 async def list_problems_html(request: Request):
@@ -27,7 +26,7 @@ async def list_problems_html(request: Request):
 
 
 @router.post("/html/{problem_id}", name="form_delete_problem")
-async def form_delete_problem(request: Request, problem_id: int):
+async def delete_problem_post(request: Request, problem_id: int):
     await problem_service.delete_problem_by_id(problem_id)
 
     return RedirectResponse(
