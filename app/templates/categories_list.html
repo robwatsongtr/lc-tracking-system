@@ -4,27 +4,29 @@
 
 {% block content %}
 <h1>Categories</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Category Name</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for category in categories %}
-        <tr>
-            <td>{{ category.category_name }}</td>
-            <td>
-                <form 
-                    method="post" 
-                    action="{{ url_for('delete_category_post', category_id=category.id) }}"
-                >
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Category Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.category_name }}</td>
+                <td>
+                    <form 
+                        method="post" 
+                        action="{{ url_for('delete_category_post', category_id=category.id) }}"
+                    >
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
