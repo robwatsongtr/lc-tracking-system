@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Approaches List{% endblock %}
+
+{% block content %}
+<h1>Approaches</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Approach Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for approach in approaches %}
+        <tr>
+            <td>{{ approach.approach_name }}</td>
+            <td>
+                <form 
+                    method="post" 
+                    action="{{ url_for('delete_approach_post', approach_id=approach.id) }}"
+                >
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
