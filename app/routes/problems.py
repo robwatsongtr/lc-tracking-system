@@ -41,7 +41,7 @@ async def show_problem_form(request: Request):
     categories = await category_service.list_categories()
     difficulties = await difficulty_service.list_difficulties()
 
-    return templates.TemplateResponse("problems_form.html", {
+    return templates.TemplateResponse("problem_form.html", {
         "request": request,
         "approaches": approaches,
         "categories": categories,
@@ -65,6 +65,31 @@ async def problem_form_handler(request: Request):
         status_code=303
     )
 
+@router.get("/html/{problem_id}/edit", name="show_problem_edit_form")
+async def show_problem_edit_form(request: Request, problem_id: int):
+    problem = await problem_service.get_problem_by_id(problem_id)
+
+    return templates.TemplateResponse("problem_edit.html", {
+        "request": request,
+        "problem": problem,
+    })
+
+@router.post("/html/{problem_id}/update", name="problem_edit_submit")
+async def problem_edit_submit(request: Request, problem_id: int):
+    form_data = await request.form()
+    data_dict = dict(form_data)
+    if "category_ids" in data_dict:
+        data_dict["category_ids"] = [
+            int(cid) for cid in form_data.getlist("category_ids")
+        ]
+
+    problem_to_update = ProblemUpdate(**data_dict)
+    await problem_service.update_problem_by_id(problem_id, problem_to_update)
+
+    return RedirectResponse(
+        url=request.url_for("list_problems_html"),
+        status_code=303
+    )
 
 """
 JSON Endponts 
