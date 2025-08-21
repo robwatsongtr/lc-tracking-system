@@ -14,7 +14,7 @@ router = APIRouter(prefix="/problems", tags=["Problems"])
 templates = Jinja2Templates(directory="templates")
 
 """
-Template / Form Endponts 
+Template / Form Endpoints 
 """
 @router.get("/html", name="list_problems_html")
 async def list_problems_html(request: Request):
@@ -67,36 +67,51 @@ async def problem_form_handler(request: Request):
             status_code=303
         )
     except asyncpg.exceptions.UniqueViolationError:
-        raise HTTPException(status_code=400, detail="LeetCode number already exists")
+        raise HTTPException(
+            status_code=400, 
+            detail="LeetCode number already exists"
+        )
     
 @router.get("/html/{problem_id}/edit", name="show_problem_edit_form")
 async def show_problem_edit_form(request: Request, problem_id: int):
     problem = await problem_service.get_problem_by_id(problem_id)
+    approaches = await approach_service.list_approaches()
+    categories = await category_service.list_categories()
+    difficulties = await difficulty_service.list_difficulties()
 
     return templates.TemplateResponse("problem_edit.html", {
         "request": request,
         "problem": problem,
+        "approaches": approaches,
+        "categories": categories,
+        "difficulties": difficulties
     })
 
-@router.post("/html/{problem_id}/update", name="problem_edit_submit")
-async def problem_edit_submit(request: Request, problem_id: int):
-    form_data = await request.form()
-    data_dict = dict(form_data)
-    if "category_ids" in data_dict:
-        data_dict["category_ids"] = [
-            int(cid) for cid in form_data.getlist("category_ids")
-        ]
+@router.post("/html/{problem_id}/update", name="problem_edit_handler")
+async def problem_edit_handler(request: Request, problem_id: int):
+    try:
+        form_data = await request.form()
+        data_dict = dict(form_data)
+        if "category_ids" in data_dict:
+            data_dict["category_ids"] = [
+                int(cid) for cid in form_data.getlist("category_ids")
+            ]
 
-    problem_to_update = ProblemUpdate(**data_dict)
-    await problem_service.update_problem_by_id(problem_id, problem_to_update)
+        problem_to_update = ProblemUpdate(**data_dict)
+        await problem_service.update_problem_by_id(problem_id, problem_to_update)
 
-    return RedirectResponse(
-        url=request.url_for("list_problems_html"),
-        status_code=303
-    )
+        return RedirectResponse(
+            url=request.url_for("list_problems_html"),
+            status_code=303
+        )
+    except asyncpg.exceptions.UniqueViolationError:
+        raise HTTPException(
+            status_code=400, 
+            detail="LeetCode number already exists"
+        )
 
 """
-JSON Endponts 
+JSON Endpoints 
 """
 @router.get("/json", response_model=list[Problem])
 async def get_problems_handler():
@@ -113,12 +128,21 @@ async def create_problem_handler(problem: ProblemCreate):
     try:
         return await problem_service.create_problem_with_categories(problem)
     except asyncpg.exceptions.UniqueViolationError:
-        raise HTTPException(status_code=400, detail="LeetCode number already exists")
+        raise HTTPException(
+            status_code=400, 
+            detail="LeetCode number already exists"
+        )
 
 
 @router.put("/json/{problem_id}", response_model=Problem)
 async def update_problem_handler(problem_id: int, problem: ProblemUpdate):
-    return await problem_service.update_problem_by_id(problem_id, problem)
+    try:
+        return await problem_service.update_problem_by_id(problem_id, problem)
+    except asyncpg.exceptions.UniqueViolationError:
+        raise HTTPException(
+            status_code=400, 
+            detail="LeetCode number already exists"
+        )
 
 
 @router.delete("/json/{problem_id}")
