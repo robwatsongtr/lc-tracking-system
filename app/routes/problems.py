@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse
 from models.Problem import Problem
 from models.ProblemCreate import ProblemCreate
@@ -8,6 +8,7 @@ from services import problem_service
 from services import approach_service
 from services import category_service
 from services import difficulty_service
+import asyncpg
 
 router = APIRouter(prefix="/problems", tags=["Problems"])
 templates = Jinja2Templates(directory="templates")
@@ -50,21 +51,24 @@ async def show_problem_form(request: Request):
 
 @router.post("/html", name="problem_form_handler")
 async def problem_form_handler(request: Request):
-    form_data = await request.form()
-    data_dict = dict(form_data)
-    if "category_ids" in data_dict:
-        data_dict["category_ids"] = [
-            int(cid) for cid in form_data.getlist("category_ids")
-        ]
+    try:    
+        form_data = await request.form()
+        data_dict = dict(form_data)
+        if "category_ids" in data_dict:
+            data_dict["category_ids"] = [
+                int(cid) for cid in form_data.getlist("category_ids")
+            ]
 
-    problem_to_insert = ProblemCreate(**data_dict)
-    await problem_service.create_problem_with_categories(problem_to_insert)
+        problem_to_insert = ProblemCreate(**data_dict)
+        await problem_service.create_problem_with_categories(problem_to_insert)
 
-    return RedirectResponse(
-        url=request.url_for("list_problems_html"),
-        status_code=303
-    )
-
+        return RedirectResponse(
+            url=request.url_for("list_problems_html"),
+            status_code=303
+        )
+    except asyncpg.exceptions.UniqueViolationError:
+        raise HTTPException(status_code=400, detail="LeetCode number already exists")
+    
 @router.get("/html/{problem_id}/edit", name="show_problem_edit_form")
 async def show_problem_edit_form(request: Request, problem_id: int):
     problem = await problem_service.get_problem_by_id(problem_id)
@@ -106,7 +110,10 @@ async def get_problem_by_id_handler(problem_id: int):
     
 @router.post("/json", response_model=Problem)
 async def create_problem_handler(problem: ProblemCreate):
-    return await problem_service.create_problem_with_categories(problem)
+    try:
+        return await problem_service.create_problem_with_categories(problem)
+    except asyncpg.exceptions.UniqueViolationError:
+        raise HTTPException(status_code=400, detail="LeetCode number already exists")
 
 
 @router.put("/json/{problem_id}", response_model=Problem)

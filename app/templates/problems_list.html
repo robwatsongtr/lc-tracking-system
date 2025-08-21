@@ -38,6 +38,12 @@
                 >
                     <button type="submit">Delete</button>
                 </form>
+                <form 
+                    method="get" 
+                    action="{{ url_for('show_problem_edit_form', problem_id=problem.id) }}"
+                >
+                    <button type="submit">Edit</button>
+                </form>
             </td>
         </tr>
         {% endfor %}
