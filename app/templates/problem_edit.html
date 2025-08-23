@@ -33,21 +33,36 @@
     <label for="diff_id">Difficulty</label>
     <select name="diff_id" id="diff_id">
         {% for diff in difficulties %}
-            <option value="{{ diff.id }}">{{ diff.diff_level }}</option>
+            <option value="{{ diff.id }}" 
+                {% if diff.id == problem.diff_id %}
+                    selected
+                {% endif %}
+            >
+                {{ diff.diff_level }}
+            </option>
         {% endfor %}
     </select>
 
     <label for="category_ids">Category</label>
     <select name="category_ids" id="category_ids" multiple>
         {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.category_name }}</option>
+            <option value="{{ category.id }}" 
+                {% if category.id in problem.category_ids %}selected{% endif %}>
+                {{ category.category_name }}
+            </option>
         {% endfor %}
     </select>
 
     <label for="approach_id">Approach</label>
     <select name="approach_id" id="approach_id">
         {% for approach in approaches %}
-            <option value="{{ approach.id }}">{{ approach.approach_name }}</option>
+            <option value="{{ approach.id }}" 
+                {% if approach.id == problem.approach_id %} 
+                    selected  
+                {% endif %}
+            >
+                {{ approach.approach_name }}
+            </option>
         {% endfor %}
     </select>
 

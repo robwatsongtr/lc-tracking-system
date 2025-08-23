@@ -54,6 +54,7 @@ async def problem_form_handler(request: Request):
     try:    
         form_data = await request.form()
         data_dict = dict(form_data)
+
         if "category_ids" in data_dict:
             data_dict["category_ids"] = [
                 int(cid) for cid in form_data.getlist("category_ids")
@@ -92,6 +93,7 @@ async def problem_edit_handler(request: Request, problem_id: int):
     try:
         form_data = await request.form()
         data_dict = dict(form_data)
+        
         if "category_ids" in data_dict:
             data_dict["category_ids"] = [
                 int(cid) for cid in form_data.getlist("category_ids")
