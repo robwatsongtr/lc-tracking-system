@@ -70,8 +70,8 @@ async def get_problem_by_id(problem_id: int) -> Problem:
                 CAST('[]' AS json)
             ) AS categories
         FROM problems p
-        JOIN approaches a ON p.approach_id = a.id
-        JOIN difficulties d ON p.diff_id = d.id
+        LEFT JOIN approaches a ON p.approach_id = a.id
+        LEFT JOIN difficulties d ON p.diff_id = d.id
         LEFT JOIN problem_categories pc ON pc.problem_id = p.id
         LEFT JOIN categories c ON c.id = pc.category_id
         WHERE p.id = :id

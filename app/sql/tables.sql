@@ -7,16 +7,19 @@ CSV import staging table
 */
 
 CREATE TABLE staging_problems (
-    
+    leetcode_num INTEGER UNIQUE,
+    diff_level VARCHAR(20),
+    category_1 VARCHAR(100),
+    category_2 VARCHAR(100),
+    approach_name VARCHAR(100),
+    problem_name VARCHAR(100),
+    problem_solution TEXT
 );
 
-/*
----------------------------
-*/
 
 CREATE TABLE problems (
     id SERIAL PRIMARY KEY,
-    leetcode_num INTEGER UNIQUE,
+    leetcode_num INTEGER,
     problem_name VARCHAR(100),
     approach_id INTEGER,
     problem_solution TEXT, 
@@ -37,7 +40,7 @@ VALUES ('Array'), ('String'), ('Hash Map'), ('Intervals');
 */
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
-    category_name VARCHAR(100) UNIQUE
+    category_name VARCHAR(100)
 );
 
 /*
@@ -56,7 +59,7 @@ VALUES ('Easy'), ('Medium'), ('Hard');
 */
 CREATE TABLE difficulties (
     id SERIAL PRIMARY KEY,
-    diff_level VARCHAR(20) UNIQUE
+    diff_level VARCHAR(20)
 );
 
 -- problem_categories join table since many to many relationship
@@ -73,3 +76,5 @@ CREATE TABLE problem_categories (
         REFERENCES categories (id)
         ON DELETE CASCADE
 );
+
+
