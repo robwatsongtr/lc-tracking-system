@@ -13,7 +13,6 @@ from routes import difficulties
 
 templates = Jinja2Templates(directory="templates")
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await database.connect()
@@ -27,7 +26,6 @@ app = FastAPI(
     lifespan=lifespan, 
     title="Leetcode Problem Tracker API", 
 )
-
 
 app.include_router(problems.router)
 app.include_router(approaches.router)

@@ -2,11 +2,22 @@
 CONSTRAINT allows you to give a name (alias) to a constraint. Good for debugging. 
 */
 
+/* 
+CSV import staging table
+*/
+
+CREATE TABLE staging_problems (
+    
+);
+
+/*
+---------------------------
+*/
+
 CREATE TABLE problems (
     id SERIAL PRIMARY KEY,
     leetcode_num INTEGER UNIQUE,
     problem_name VARCHAR(100),
-    problem_desc TEXT,
     approach_id INTEGER,
     problem_solution TEXT, 
     diff_id INTEGER,

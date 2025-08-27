@@ -13,7 +13,6 @@ async def list_problems() -> list[Problem]:
             p.id,
             p.leetcode_num,
             p.problem_name,
-            p.problem_desc,
             p.approach_id,
             p.problem_solution,
             p.diff_id,
@@ -29,13 +28,13 @@ async def list_problems() -> list[Problem]:
                 CAST('[]' AS json)
             ) AS categories
         FROM problems p
-        JOIN approaches a ON p.approach_id = a.id
-        JOIN difficulties d ON p.diff_id = d.id
+        LEFT JOIN approaches a ON p.approach_id = a.id
+        LEFT JOIN difficulties d ON p.diff_id = d.id
         LEFT JOIN problem_categories pc ON pc.problem_id = p.id
         LEFT JOIN categories c ON c.id = pc.category_id
         GROUP BY 
-            p.id, p.leetcode_num, p.problem_desc, p.approach_id, 
-            p.problem_solution, p.diff_id, a.approach_name, d.diff_level
+            p.id, p.leetcode_num, p.approach_id, p.problem_solution,
+            p.diff_id, a.approach_name, d.diff_level
     """
     rows = await database.fetch_all(query)
     response = []
@@ -56,7 +55,6 @@ async def get_problem_by_id(problem_id: int) -> Problem:
             p.id,
             p.leetcode_num,
             p.problem_name,
-            p.problem_desc,
             p.approach_id,
             p.problem_solution,
             p.diff_id,
@@ -78,8 +76,8 @@ async def get_problem_by_id(problem_id: int) -> Problem:
         LEFT JOIN categories c ON c.id = pc.category_id
         WHERE p.id = :id
         GROUP BY 
-            p.id, p.leetcode_num, p.problem_desc, p.approach_id, 
-            p.problem_solution, p.diff_id, a.approach_name, d.diff_level    
+            p.id, p.leetcode_num, p.approach_id, p.problem_solution,
+            p.diff_id, a.approach_name, d.diff_level    
     """
     row = await database.fetch_one(query=query, values=values)
     if row is None:
@@ -97,7 +95,6 @@ async def create_problem_with_categories(problem: ProblemCreate) -> Problem:
         INSERT INTO problems (
             leetcode_num,
             problem_name,
-            problem_desc,
             approach_id,
             problem_solution,
             diff_id   
@@ -105,7 +102,6 @@ async def create_problem_with_categories(problem: ProblemCreate) -> Problem:
         VALUES (
             :leetcode_num,
             :problem_name,
-            :problem_desc,
             :approach_id,
             :problem_solution,
             :diff_id
