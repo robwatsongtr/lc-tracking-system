@@ -36,21 +36,21 @@ async def delete_problem_post(request: Request, problem_id: int):
     )
 
 
-@router.get("/html/new", name="show_problem_form")
-async def show_problem_form(request: Request):
+@router.get("/html/new", name="show_problem_create_form")
+async def show_problem_create_form(request: Request):
     approaches = await approach_service.list_approaches()
     categories = await category_service.list_categories()
     difficulties = await difficulty_service.list_difficulties()
 
-    return templates.TemplateResponse("problem_form.html", {
+    return templates.TemplateResponse("problem_create.html", {
         "request": request,
         "approaches": approaches,
         "categories": categories,
         "difficulties": difficulties
     })
 
-@router.post("/html", name="problem_form_handler")
-async def problem_form_handler(request: Request):
+@router.post("/html", name="problem_create_handler")
+async def problem_create_handler(request: Request):
     try:    
         form_data = await request.form()
         data_dict = dict(form_data)
@@ -112,6 +112,9 @@ async def problem_edit_handler(request: Request, problem_id: int):
             status_code=400, 
             detail="LeetCode number already exists"
         )
+
+
+
 
 """
 JSON Endpoints 

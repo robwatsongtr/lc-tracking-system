@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Create Problem</h1>
+<h1>Search Problem</h1>
 <form 
     method="post" 
-    action="{{ url_for('problem_form_handler') }}"
+    action="{{ url_for('problem_search_form_handler') }}"
     class="form-container"
 >
     <label for="leetcode_num">LeetCode Num</label>
@@ -12,9 +12,6 @@
 
     <label for="problem_name">Problem Name</label>
     <input type="text" name="problem_name" id="problem_name">
-
-    <label for="problem_solution">Problem Solution</label>
-    <textarea name="problem_solution" id="problem_solution"></textarea> 
 
     <label for="diff_id">Difficulty</label>
     <select name="diff_id" id="diff_id">
@@ -37,6 +34,6 @@
         {% endfor %}
     </select>
     
-    <button type="submit">Create</button>
+    <button type="submit">Search</button>
 </form>
 {% endblock %}
