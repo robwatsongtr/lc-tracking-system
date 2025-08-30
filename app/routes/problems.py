@@ -60,6 +60,7 @@ async def problem_form_handler(request: Request):
                 int(cid) for cid in form_data.getlist("category_ids")
             ]
 
+
         problem_to_insert = ProblemCreate(**data_dict)
         await problem_service.create_problem_with_categories(problem_to_insert)
 
