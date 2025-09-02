@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<h1>Search Results</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Leetcode Num</th>
+            <th>Name</th>
+            <th>Difficulty</th>
+            <th>Solution</th>
+            <th>Categories</th>
+            <th>Approach</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for problem in problems %}
+        <tr>
+            <td>{{ problem.leetcode_num }}</td>
+            <td>{{ problem.problem_name }}</td>
+            <td>{{ problem.diff_level }}</td>
+            <td>{{ problem.problem_solution }}</td>
+            <td>
+                {% for category in problem.categories %}
+                    <span class="categories">{{ category.category_name }}</span>
+                {% endfor %}
+            </td>
+            <td>{{ problem.approach_name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

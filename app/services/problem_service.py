@@ -5,6 +5,8 @@ from models.ProblemCreate import ProblemCreate
 import json
 from .utils import row_exists
 from .utils import build_sql_set_clause
+from .utils import build_search_query
+from .utils import clean_values
 from fastapi import HTTPException
 
 async def list_problems() -> list[Problem]:
@@ -191,3 +193,19 @@ async def delete_problem_by_id(problem_id: int) -> dict:
 
     return response 
 
+async def search_problems(search_params: Problem):
+    values = search_params.model_dump()
+    # only keys with real values are kept 
+    cleaned_values = clean_values(values)
+    search_query_str = build_search_query(cleaned_values)
+
+    query = f'{search_query_str}'
+    rows = await database.fetch_all(query, values=cleaned_values)
+
+    response = []
+    for row in rows:
+        row_dict = dict(row)
+        row_dict['categories'] = json.loads(row_dict['categories'])
+        response.append(Problem(**row_dict))
+
+    return response

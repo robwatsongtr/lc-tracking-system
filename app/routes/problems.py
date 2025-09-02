@@ -51,6 +51,7 @@ async def show_problem_create_form(request: Request):
         "difficulties": difficulties
     })
 
+
 @router.post("/html/create", name="problem_create_handler")
 async def problem_create_handler(request: Request):
     try:    
@@ -75,6 +76,7 @@ async def problem_create_handler(request: Request):
             detail="LeetCode number already exists"
         )
     
+    
 @router.get("/html/{problem_id}/edit", name="show_problem_edit_form")
 async def show_problem_edit_form(request: Request, problem_id: int):
     problem = await problem_service.get_problem_by_id(problem_id)
@@ -89,6 +91,7 @@ async def show_problem_edit_form(request: Request, problem_id: int):
         "categories": categories,
         "difficulties": difficulties
     })
+
 
 @router.post("/html/{problem_id}/update", name="problem_edit_handler")
 async def problem_edit_handler(request: Request, problem_id: int):
@@ -113,6 +116,7 @@ async def problem_edit_handler(request: Request, problem_id: int):
             status_code=400, 
             detail="LeetCode number already exists"
         )
+    
 
 @router.get("/html/search", name="show_problem_search_form")
 async def show_problem_search_form(request: Request):
@@ -125,13 +129,15 @@ async def show_problem_search_form(request: Request):
         "approaches": approaches,
         "categories": categories,
         "difficulties": difficulties
-    })    
+    })  
+  
 
 @router.get("/html/dosearch", name="problem_search_handler")
 async def problem_search_handler(
     request: Request, 
     leetcode_num: Optional[str] = Query(None),
     problem_name: Optional[str] = Query(None),
+    approach_id: Optional[str] = None,
     diff_id: Optional[str] = Query(None),
     category_ids: Optional[List[int]] = Query(None)
 ):
@@ -140,10 +146,20 @@ async def problem_search_handler(
         leetcode_num=leetcode_num,
         problem_name=problem_name,
         diff_id=diff_id,
+        approach_id=approach_id,
         category_ids=category_ids or []
     )
 
     print(search_params)
+
+    problems = await problem_service.search_problems(search_params)
+
+    print(problems)
+
+    return templates.TemplateResponse("search_results.html", {
+        "request": request,
+        "problems": problems,
+    })
 
 
 """
