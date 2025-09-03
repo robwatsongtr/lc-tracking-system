@@ -150,11 +150,11 @@ async def problem_search_handler(
         category_ids=category_ids or []
     )
 
-    print(search_params)
+    print(f'Search Params: {search_params}')
 
     problems = await problem_service.search_problems(search_params)
 
-    print(problems)
+    print(f'Problems to render: {problems}')
 
     return templates.TemplateResponse("search_results.html", {
         "request": request,

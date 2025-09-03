@@ -64,9 +64,9 @@ def build_search_query(values: dict) -> str:
 
 def clean_values(values: dict) -> dict:
     cleaned_values = {}
-    # only keys with real values are kept 
     for key, value in values.items():
-        if value not in ("", None):
+        # strip empty string, none or empty list keys
+        if value not in ("", None, []):
             cleaned_values[key] = value
 
     return cleaned_values
