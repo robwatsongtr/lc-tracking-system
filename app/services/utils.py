@@ -19,13 +19,13 @@ def build_search_query(values: dict) -> str:
     filters_arr = []
 
     for key in values:
-        if key != "category_ids":    
-            if values[key] is not None:
-                filters_arr.append(f' AND {key} = :{key}')
+        if key == "problem_name":
+            # partial string match with ILIKE
+            filters_arr.append(f" AND {key} ILIKE '%' || :{key} || '%'")
+        elif key == "category_ids":
+            filters_arr.append(f' AND pc.category_id = ANY(:category_ids)')
         else:
-            if values['category_ids'] is not None:
-                # basic filter can't handle multiple categories together
-                filters_arr.append(f' AND pc.category_id = ANY(:category_ids)')
+            filters_arr.append(f" AND {key} = :{key}")
 
     filters = " ".join(filters_arr)
 
