@@ -195,14 +195,14 @@ async def delete_problem_by_id(problem_id: int) -> dict:
 
 async def search_problems(search_params: Problem):
     values = search_params.model_dump()
-    print(f'model dumped values: {values}')
+    # print(f'model dumped values: {values}')
 
     # only keys with real values are kept 
     cleaned_values = clean_values(values)
-    print(f'cleaned values: {cleaned_values}')
+    #print(f'cleaned values: {cleaned_values}')
 
     search_query_str = build_search_query(cleaned_values)
-    print(f'search query string: {search_query_str}')
+    # print(f'search query string: {search_query_str}')
 
     query = f'{search_query_str}'
     rows = await database.fetch_all(query, values=cleaned_values)
