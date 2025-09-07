@@ -4,6 +4,7 @@ from models.Problem import Problem
 from models.ProblemCreate import ProblemCreate
 from models.ProblemUpdate import ProblemUpdate
 from models.ProblemSearch import ProblemSearch
+from models.ProblemRandom import ProblemRandom
 from fastapi.templating import Jinja2Templates
 from services import problem_service
 from services import approach_service
@@ -157,6 +158,21 @@ async def problem_search_handler(
         "request": request,
         "problems": problems,
     })
+
+@router.get("/html/randomize", name="problem_randomize_handler")
+async def problem_randomize_handler(
+    request: Request,
+    diff_id: Optional[str] = Query(None),
+    category_ids: Optional[List[int]] = Query(None),
+    limit: Optional[str] = Query(None)
+):
+    query_params = ProblemRandom(
+        diff_id=diff_id,
+        category_ids=category_ids,
+        limit=limit
+    )
+    
+    print(f'Query params:{query_params}')
 
 
 """
