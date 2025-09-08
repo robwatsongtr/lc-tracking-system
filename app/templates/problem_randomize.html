@@ -12,19 +12,25 @@
         {% for diff in difficulties %}
             <option value="{{ diff.id }}">{{ diff.diff_level }}</option>
         {% endfor %}
-        <option value="">-- None --</option>
     </select>
     
     <label for="category_ids">Category</label>
-    <select name="category_ids" id="category_ids">
+    <select name="category_ids" id="category_ids" multiple>
         {% for category in categories %}
             <option value="{{ category.id }}">{{ category.category_name }}</option>
         {% endfor %}
-        <option value="">-- None --</option>
     </select>
 
     <label for="limit">Limit</label>
-    <input type="number" name="limit" id="limit" step="1">
+    <input 
+        type="number" 
+        name="limit" 
+        id="limit" 
+        step="1"
+        value="3" 
+        min="1" 
+        max="10"
+    >
 
     <button type="submit">Submit</button>
 </form>

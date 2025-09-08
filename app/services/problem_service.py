@@ -214,3 +214,10 @@ async def search_problems(search_params: Problem):
         response.append(Problem(**row_dict))
 
     return response
+
+async def get_randomized_problems(random_filters: Problem):
+    values = random_filters.model_dump()
+    print(f'model dumped values: {values}')
+
+    cleaned_values = clean_values(values)
+    print(f'cleaned values: {cleaned_values}')

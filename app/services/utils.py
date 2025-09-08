@@ -7,6 +7,7 @@ async def row_exists(model_id: int, table_name: str) -> bool:
 
     return row is not None 
 
+
 def build_sql_set_clause(values: dict) -> str:
     set_clauses_list = []
     for key in values:
@@ -14,6 +15,17 @@ def build_sql_set_clause(values: dict) -> str:
             set_clauses_list.append(f"{key} = :{key}")
 
     return ", ".join(set_clauses_list)
+
+
+def clean_values(values: dict) -> dict:
+    cleaned_values = {}
+    for key, value in values.items():
+        # strip empty string, none or empty list keys
+        if value not in ("", None, []):
+            cleaned_values[key] = value
+
+    return cleaned_values
+
 
 def build_search_query(values: dict) -> str:
     filters_arr = []
@@ -62,11 +74,3 @@ def build_search_query(values: dict) -> str:
     
     return query 
 
-def clean_values(values: dict) -> dict:
-    cleaned_values = {}
-    for key, value in values.items():
-        # strip empty string, none or empty list keys
-        if value not in ("", None, []):
-            cleaned_values[key] = value
-
-    return cleaned_values

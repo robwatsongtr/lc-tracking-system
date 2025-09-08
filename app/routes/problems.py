@@ -4,7 +4,7 @@ from models.Problem import Problem
 from models.ProblemCreate import ProblemCreate
 from models.ProblemUpdate import ProblemUpdate
 from models.ProblemSearch import ProblemSearch
-from models.ProblemRandom import ProblemRandom
+from models.ProblemRandomize import ProblemRandomize
 from fastapi.templating import Jinja2Templates
 from services import problem_service
 from services import approach_service
@@ -154,25 +154,43 @@ async def problem_search_handler(
     # print(f'Search Params: {search_params}')
     problems = await problem_service.search_problems(search_params)
 
-    return templates.TemplateResponse("search_results.html", {
+    return templates.TemplateResponse("results.html", {
         "request": request,
         "problems": problems,
     })
 
-@router.get("/html/randomize", name="problem_randomize_handler")
+@router.get("/html/randomize", name="show_problem_randomize_form")
+async def show_problem_randomize_form(request: Request):
+    categories = await category_service.list_categories()
+    difficulties = await difficulty_service.list_difficulties()
+
+    return templates.TemplateResponse("problem_randomize.html", {
+        "request": request,
+        "categories": categories,
+        "difficulties": difficulties
+    })  
+
+
+@router.get("/html/dorandomize", name="problem_randomize_handler")
 async def problem_randomize_handler(
     request: Request,
     diff_id: Optional[str] = Query(None),
     category_ids: Optional[List[int]] = Query(None),
     limit: Optional[str] = Query(None)
 ):
-    query_params = ProblemRandom(
+    random_filters = ProblemRandomize(
         diff_id=diff_id,
         category_ids=category_ids,
         limit=limit
     )
     
-    print(f'Query params:{query_params}')
+    print(f'Query string randomize filters: {random_filters}')
+    problems = await problem_service.get_randomized_problems(random_filters)
+
+    # return templates.TemplateResponse("results.html", {
+    #     "request": request,
+    #     "problems": problems,
+    # })
 
 
 """
