@@ -184,13 +184,13 @@ async def problem_randomize_handler(
         limit=limit
     )
     
-    print(f'Query string randomize filters: {random_filters}')
+    # print(f'Query string randomize filters: {random_filters}')
     problems = await problem_service.get_randomized_problems(random_filters)
 
-    # return templates.TemplateResponse("results.html", {
-    #     "request": request,
-    #     "problems": problems,
-    # })
+    return templates.TemplateResponse("results.html", {
+        "request": request,
+        "problems": problems,
+    })
 
 
 """

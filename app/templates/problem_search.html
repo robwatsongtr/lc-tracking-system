@@ -33,7 +33,7 @@
         {% for approach in approaches %}
             <option value="{{ approach.id }}">{{ approach.approach_name }}</option>
         {% endfor %}
-        <option value="">-- None --</option>
+        <option value="" selected>-- None --</option>
     </select>
     
     <button type="submit">Search</button>

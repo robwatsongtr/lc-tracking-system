@@ -2,12 +2,16 @@ from db import database
 from models.Problem import Problem
 from models.ProblemUpdate import ProblemUpdate
 from models.ProblemCreate import ProblemCreate
+from models.ProblemSearch import ProblemSearch
+from models.ProblemRandomize import ProblemRandomize
 import json
+import random 
 from .utils import row_exists
 from .utils import build_sql_set_clause
 from .utils import build_search_query
 from .utils import clean_values
 from fastapi import HTTPException
+
 
 async def list_problems() -> list[Problem]:
     query = """
@@ -193,14 +197,11 @@ async def delete_problem_by_id(problem_id: int) -> dict:
 
     return response 
 
-async def search_problems(search_params: Problem):
+async def search_problems(search_params: ProblemSearch) -> list[Problem]:
     values = search_params.model_dump()
     # print(f'model dumped values: {values}')
-
-    # only keys with real values are kept 
-    cleaned_values = clean_values(values)
-    #print(f'cleaned values: {cleaned_values}')
-
+    cleaned_values = clean_values(values) # only keys with real values are kept 
+    # print(f'cleaned values: {cleaned_values}')
     search_query_str = build_search_query(cleaned_values)
     # print(f'search query string: {search_query_str}')
 
@@ -215,9 +216,37 @@ async def search_problems(search_params: Problem):
 
     return response
 
-async def get_randomized_problems(random_filters: Problem):
+async def get_randomized_problems(random_filters: ProblemRandomize):
     values = random_filters.model_dump()
-    print(f'model dumped values: {values}')
-
+    # print(f'model dumped values: {values}')
     cleaned_values = clean_values(values)
-    print(f'cleaned values: {cleaned_values}')
+    # print(f'cleaned values: {cleaned_values}')
+    query_values = { 'diff_id': cleaned_values["diff_id"]}
+    limit_num = cleaned_values["limit"]
+
+    if 'category_ids' not in cleaned_values:
+        # get all rows of the selected difficulty level 
+        query = """
+            SELECT p.id FROM problems p WHERE diff_id = :diff_id 
+        """
+        rows = await database.fetch_all(query, values=query_values)
+        rows_dict = [ dict(row) for row in rows ]
+        # print(rows_dict)
+        random_list = random.sample(rows_dict, limit_num)
+        # print(f'random sample: {random_list}')
+        response = []
+        for item in random_list:
+            id = item["id"]
+            row = await get_problem_by_id(id)
+            response.append(row)
+
+        return response  
+
+
+        
+
+
+
+        
+
+
