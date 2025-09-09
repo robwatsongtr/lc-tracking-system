@@ -221,15 +221,20 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
     # print(f'model dumped values: {values}')
     cleaned_values = clean_values(values)
     # print(f'cleaned values: {cleaned_values}')
-    query_values = { 'diff_id': cleaned_values["diff_id"]}
+
+    diff_val = { 'diff_id': cleaned_values["diff_id"]}
+    category_vals = { 'category_ids': cleaned_values.get('category_ids')}
+    combined_vals = diff_val | category_vals
+
     limit_num = cleaned_values["limit"]
+    
 
     if 'category_ids' not in cleaned_values:
         # get all rows of the selected difficulty level 
         query = """
             SELECT p.id FROM problems p WHERE diff_id = :diff_id 
         """
-        rows = await database.fetch_all(query, values=query_values)
+        rows = await database.fetch_all(query, values=diff_val)
         rows_dict = [ dict(row) for row in rows ]
         # print(rows_dict)
         random_list = random.sample(rows_dict, limit_num)
@@ -241,6 +246,31 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
             response.append(row)
 
         return response  
+
+    else:
+        query = """
+            SELECT DISTINCT p.id
+            FROM problems p
+            JOIN problem_categories pc ON pc.problem_id = p.id
+            WHERE diff_id = :diff_id 
+                AND pc.category_id = ANY(:category_ids)
+        """
+        rows = await database.fetch_all(query, values=combined_vals)
+        rows_dict = [ dict(row) for row in rows ]
+        # print(rows_dict)
+        random_list = random.sample(rows_dict, limit_num)
+        # print(f'random sample: {random_list}')
+
+        response = []
+        for item in random_list:
+            id = item["id"]
+            row = await get_problem_by_id(id)
+            response.append(row)
+
+        return response  
+
+        
+        
 
 
         
