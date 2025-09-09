@@ -216,6 +216,7 @@ async def search_problems(search_params: ProblemSearch) -> list[Problem]:
 
     return response
 
+
 async def get_randomized_problems(random_filters: ProblemRandomize):
     values = random_filters.model_dump()
     # print(f'model dumped values: {values}')
@@ -225,29 +226,9 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
     diff_val = { 'diff_id': cleaned_values["diff_id"]}
     category_vals = { 'category_ids': cleaned_values.get('category_ids')}
     combined_vals = diff_val | category_vals
-
     limit_num = cleaned_values["limit"]
-    
 
-    if 'category_ids' not in cleaned_values:
-        # get all rows of the selected difficulty level 
-        query = """
-            SELECT p.id FROM problems p WHERE diff_id = :diff_id 
-        """
-        rows = await database.fetch_all(query, values=diff_val)
-        rows_dict = [ dict(row) for row in rows ]
-        # print(rows_dict)
-        random_list = random.sample(rows_dict, limit_num)
-        # print(f'random sample: {random_list}')
-        response = []
-        for item in random_list:
-            id = item["id"]
-            row = await get_problem_by_id(id)
-            response.append(row)
-
-        return response  
-
-    else:
+    if cleaned_values.get("category_ids"):
         query = """
             SELECT DISTINCT p.id
             FROM problems p
@@ -255,31 +236,26 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
             WHERE diff_id = :diff_id 
                 AND pc.category_id = ANY(:category_ids)
         """
-        rows = await database.fetch_all(query, values=combined_vals)
-        rows_dict = [ dict(row) for row in rows ]
+        q_vals = combined_vals
+    else:
+        query = """
+            SELECT p.id FROM problems p WHERE diff_id = :diff_id 
+        """
+        q_vals = diff_val
 
-        if limit_num > len(rows_dict): return
-        
-        # print(rows_dict)
-        random_list = random.sample(rows_dict, limit_num)
-        # print(f'random sample: {random_list}')
+    rows = await database.fetch_all(query, values=q_vals)
+    rows_dict = [ dict(row) for row in rows ]
+    # print(rows_dict)
+    if limit_num > len(rows_dict): 
+        limit_num = len(rows_dict)
 
-        response = []
-        for item in random_list:
-            id = item["id"]
-            row = await get_problem_by_id(id)
-            response.append(row)
+    random_list = random.sample(rows_dict, limit_num)
 
-        return response  
+    response = []
+    for item in random_list:
+        id = item["id"]
+        row = await get_problem_by_id(id)
+        response.append(row)
 
-        
-        
-
-
-        
-
-
-
-        
-
+    return response  
 

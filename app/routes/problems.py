@@ -187,12 +187,6 @@ async def problem_randomize_handler(
     # print(f'Query string randomize filters: {random_filters}')
     problems = await problem_service.get_randomized_problems(random_filters)
 
-    if not problems:
-        return RedirectResponse(
-        url=request.url_for("show_problem_randomize_form"),
-        status_code=303
-    )
-
     return templates.TemplateResponse("results.html", {
         "request": request,
         "problems": problems,
