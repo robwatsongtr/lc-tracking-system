@@ -257,6 +257,9 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
         """
         rows = await database.fetch_all(query, values=combined_vals)
         rows_dict = [ dict(row) for row in rows ]
+
+        if limit_num > len(rows_dict): return
+        
         # print(rows_dict)
         random_list = random.sample(rows_dict, limit_num)
         # print(f'random sample: {random_list}')
