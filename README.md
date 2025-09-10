@@ -1,6 +1,7 @@
 # LeetCode Tracker
 
 A lightweight backend built with **FastAPI** and **PostgreSQL** (using `databases` and raw SQL, no ORM) to track completed LeetCode problems.  
+
 The app also serves a simple **Jinja2-based UI** for browsing, searching and managing your problem history. 
 
 A cool feature is a randomizer that can randomly give you problems from your databse to re-solve, because that's an important way to get better. 
