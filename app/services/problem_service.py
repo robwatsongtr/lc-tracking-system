@@ -57,7 +57,7 @@ async def list_problems() -> list[Problem]:
 async def get_problem_by_id(problem_id: int) -> Problem:
     values={ "id": problem_id }
     query = """
-           SELECT 
+        SELECT 
             p.id,
             p.leetcode_num,
             p.problem_name,
@@ -218,6 +218,11 @@ async def search_problems(search_params: ProblemSearch) -> list[Problem]:
 
 
 async def get_randomized_problems(random_filters: ProblemRandomize):
+    """
+    I am aware that I can do this in SQL fully, and I will do so at 
+    a later date. I just thought it would be interesting to implement this
+    in Python first.
+    """
     values = random_filters.model_dump()
     # print(f'model dumped values: {values}')
     cleaned_values = clean_values(values)
@@ -226,7 +231,10 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
     diff_val = { 'diff_id': cleaned_values["diff_id"]}
     category_vals = { 'category_ids': cleaned_values.get('category_ids')}
     combined_vals = diff_val | category_vals
+
     limit_num = cleaned_values["limit"]
+    if limit_num > len(rows_dict): 
+        limit_num = len(rows_dict)
 
     if cleaned_values.get("category_ids"):
         query = """
@@ -246,9 +254,6 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
     rows = await database.fetch_all(query, values=q_vals)
     rows_dict = [ dict(row) for row in rows ]
     # print(rows_dict)
-    if limit_num > len(rows_dict): 
-        limit_num = len(rows_dict)
-
     random_list = random.sample(rows_dict, limit_num)
 
     response = []
