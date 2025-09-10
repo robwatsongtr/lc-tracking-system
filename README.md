@@ -1,7 +1,9 @@
 # LeetCode Tracker
 
 A lightweight backend built with **FastAPI** and **PostgreSQL** (using `databases` and raw SQL, no ORM) to track completed LeetCode problems.  
-The app also serves a simple **Jinja2-based UI** for browsing and managing your problem history.
+The app also serves a simple **Jinja2-based UI** for browsing, searching and managing your problem history. 
+
+A cool feature is a randomizer that can randomly give you problems from your databse to re-solve, because that's an important way to get better. 
 
 ## Features
 
@@ -54,4 +56,4 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-Visit: [http://127.0.0.1:8000](http://127.0.0.1:8000)
+Visit: [http://127.0.0.1:8000/home](http://127.0.0.1:8000/home)
