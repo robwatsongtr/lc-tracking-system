@@ -16,16 +16,6 @@ A cool feature is a randomizer that can randomly give you problems from your dat
   - Approach used (Two Pointer, Sliding Window, Binary Search, etc.)
   - Pseudocode for your solution
 - 🔄 Full CRUD support
-  - Create, Read, Update, Delete problems
-- 🌐 FastAPI backend with clean SQL queries
-- 🎨 Jinja2 UI for easy interaction
-
-## Tech Stack
-
-- **Backend:** [FastAPI](https://fastapi.tiangolo.com/)  
-- **Database:** PostgreSQL with [`databases`](https://www.encode.io/databases/) library  
-- **Templating:** Jinja2  
-- **SQL:** Raw queries (no ORM)
 
 ## Setup
 
@@ -58,3 +48,6 @@ uvicorn app.main:app --reload
 ```
 
 Visit: [http://127.0.0.1:8000/home](http://127.0.0.1:8000/home)
+
+
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the LICENSE file for detials.
