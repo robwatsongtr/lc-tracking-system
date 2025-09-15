@@ -1,21 +1,7 @@
-/* 
-CONSTRAINT allows you to give a name (alias) to a constraint. Good for debugging. 
-*/
 
 /* 
-CSV import staging table
+App tables
 */
-
-CREATE TABLE staging_problems (
-    leetcode_num INTEGER UNIQUE,
-    diff_level VARCHAR(20),
-    category_1 VARCHAR(100),
-    category_2 VARCHAR(100),
-    approach_name VARCHAR(100),
-    problem_name VARCHAR(100),
-    problem_solution TEXT
-);
-
 
 CREATE TABLE problems (
     id SERIAL PRIMARY KEY,
@@ -50,7 +36,6 @@ CREATE TABLE difficulties (
     diff_level VARCHAR(20)
 );
 
--- problem_categories join table since many to many relationship
 CREATE TABLE problem_categories (
     problem_id INTEGER,
     category_id INTEGER,
@@ -65,4 +50,16 @@ CREATE TABLE problem_categories (
         ON DELETE CASCADE
 );
 
+/* 
+CSV import staging table
+*/
 
+CREATE TABLE staging_problems (
+    leetcode_num INTEGER UNIQUE,
+    diff_level VARCHAR(20),
+    category_1 VARCHAR(100),
+    category_2 VARCHAR(100),
+    approach_name VARCHAR(100),
+    problem_name VARCHAR(100),
+    problem_solution TEXT
+);

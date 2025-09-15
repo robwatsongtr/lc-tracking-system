@@ -43,15 +43,16 @@
             border-radius: 6px;
             overflow: hidden;
         }
-        th, td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #2e2e2e;
-            text-align: left;
-        }
         th {
             background: #2a2a2a;
             color: #bbbbbb;
             font-weight: bold;
+            font-size: 1rem;  /* keep headers readable */
+            padding: 18px 15px; /* headers a bit taller */
+        }
+        td {
+            font-size: 0.9rem;  /* slightly smaller for cell content */
+            padding: 16px 15px; /* more vertical padding */
         }
         tr:hover {
             background: #2e2e2e;
