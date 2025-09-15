@@ -233,9 +233,7 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
     combined_vals = diff_val | category_vals
 
     limit_num = cleaned_values["limit"]
-    if limit_num > len(rows_dict): 
-        limit_num = len(rows_dict)
-
+    
     if cleaned_values.get("category_ids"):
         query = """
             SELECT DISTINCT p.id
@@ -253,7 +251,9 @@ async def get_randomized_problems(random_filters: ProblemRandomize):
 
     rows = await database.fetch_all(query, values=q_vals)
     rows_dict = [ dict(row) for row in rows ]
-    # print(rows_dict)
+    if limit_num > len(rows_dict): 
+        limit_num = len(rows_dict)
+
     random_list = random.sample(rows_dict, limit_num)
 
     response = []
