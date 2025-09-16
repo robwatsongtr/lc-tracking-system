@@ -26,8 +26,7 @@ FROM problems p
 LEFT JOIN approaches a ON p.approach_id = a.id
 LEFT JOIN difficulties d ON p.diff_id = d.id
 
-/* For each row in problems, SQL looks in problem_categories 
-for all rows where problem_id matches.*/
+/* SQL looks in problem_categories for all rows where problem_id matches.*/
 LEFT JOIN problem_categories pc ON pc.problem_id = p.id
 
 /*

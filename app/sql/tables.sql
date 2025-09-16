@@ -1,4 +1,3 @@
-
 /* 
 App tables
 */
@@ -19,7 +18,6 @@ CREATE TABLE problems (
         REFERENCES difficulties (id)
         ON DELETE SET NULL
 );
-
 
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
@@ -50,16 +48,3 @@ CREATE TABLE problem_categories (
         ON DELETE CASCADE
 );
 
-/* 
-CSV import staging table
-*/
-
-CREATE TABLE staging_problems (
-    leetcode_num INTEGER UNIQUE,
-    diff_level VARCHAR(20),
-    category_1 VARCHAR(100),
-    category_2 VARCHAR(100),
-    approach_name VARCHAR(100),
-    problem_name VARCHAR(100),
-    problem_solution TEXT
-);
