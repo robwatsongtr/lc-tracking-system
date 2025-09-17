@@ -45,11 +45,14 @@ async def show_problem_create_form(request: Request):
     categories = await category_service.list_categories()
     difficulties = await difficulty_service.list_difficulties()
 
+    selected_id = 21 # "No Specific Approach"
+
     return templates.TemplateResponse("problem_create.html", {
         "request": request,
         "approaches": approaches,
         "categories": categories,
-        "difficulties": difficulties
+        "difficulties": difficulties,
+        "selected_id" : selected_id
     })
 
 

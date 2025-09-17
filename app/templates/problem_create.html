@@ -33,7 +33,13 @@
     <label for="approach_id">Approach</label>
     <select name="approach_id" id="approach_id">
         {% for approach in approaches %}
-            <option value="{{ approach.id }}">{{ approach.approach_name }}</option>
+            <option value="{{ approach.id }}"
+                {% if approach.id == selected_id %}
+                    selected
+                {% endif %}
+            >
+                {{ approach.approach_name }}
+            </option>
         {% endfor %}
     </select>
     
