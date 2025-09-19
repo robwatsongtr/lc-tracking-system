@@ -47,7 +47,7 @@ async def show_problem_create_form(request: Request):
 
     selected_id = 21 # "No Specific Approach"
 
-    return templates.TemplateResponse("problem_create.html", {
+    return templates.TemplateResponse("problems_create.html", {
         "request": request,
         "approaches": approaches,
         "categories": categories,
@@ -57,7 +57,7 @@ async def show_problem_create_form(request: Request):
 
 
 @router.post("/html/create", name="problem_create_handler")
-async def problem_create_handler(request: Request):
+async def create_problem_form(request: Request):
     try:    
         form_data = await request.form()
         data_dict = dict(form_data)
@@ -88,7 +88,7 @@ async def show_problem_edit_form(request: Request, problem_id: int):
     categories = await category_service.list_categories()
     difficulties = await difficulty_service.list_difficulties()
 
-    return templates.TemplateResponse("problem_edit.html", {
+    return templates.TemplateResponse("problems_edit.html", {
         "request": request,
         "problem": problem,
         "approaches": approaches,
@@ -98,7 +98,7 @@ async def show_problem_edit_form(request: Request, problem_id: int):
 
 
 @router.post("/html/{problem_id}/update", name="problem_edit_handler")
-async def problem_edit_handler(request: Request, problem_id: int):
+async def update_problem_form(request: Request, problem_id: int):
     try:
         form_data = await request.form()
         data_dict = dict(form_data)
@@ -128,7 +128,7 @@ async def show_problem_search_form(request: Request):
     categories = await category_service.list_categories()
     difficulties = await difficulty_service.list_difficulties()
 
-    return templates.TemplateResponse("problem_search.html", {
+    return templates.TemplateResponse("problems_search.html", {
         "request": request,
         "approaches": approaches,
         "categories": categories,
@@ -137,7 +137,7 @@ async def show_problem_search_form(request: Request):
   
 
 @router.get("/html/dosearch", name="problem_search_handler")
-async def problem_search_handler(
+async def search_problems(
     request: Request, 
     leetcode_num: Optional[str] = Query(None),
     problem_name: Optional[str] = Query(None),
@@ -167,7 +167,7 @@ async def show_problem_randomize_form(request: Request):
     categories = await category_service.list_categories()
     difficulties = await difficulty_service.list_difficulties()
 
-    return templates.TemplateResponse("problem_randomize.html", {
+    return templates.TemplateResponse("problems_randomize.html", {
         "request": request,
         "categories": categories,
         "difficulties": difficulties
@@ -175,7 +175,7 @@ async def show_problem_randomize_form(request: Request):
 
 
 @router.get("/html/dorandomize", name="problem_randomize_handler")
-async def problem_randomize_handler(
+async def randomize_problems(
     request: Request,
     diff_id: Optional[str] = Query(None),
     category_ids: Optional[List[int]] = Query(None),
@@ -200,17 +200,17 @@ async def problem_randomize_handler(
 JSON Endpoints 
 """
 @router.get("/json", response_model=list[Problem])
-async def get_problems_handler():
+async def get_problems():
     return await problem_service.list_problems()
 
 
 @router.get("/json/{problem_id}", response_model=Problem)
-async def get_problem_by_id_handler(problem_id: int):
+async def get_problem_by_id(problem_id: int):
     return await problem_service.get_problem_by_id(problem_id)
 
     
 @router.post("/json", response_model=Problem)
-async def create_problem_handler(problem: ProblemCreate):
+async def create_problem(problem: ProblemCreate):
     try:
         return await problem_service.create_problem_with_categories(problem)
     except asyncpg.exceptions.UniqueViolationError:
@@ -221,7 +221,7 @@ async def create_problem_handler(problem: ProblemCreate):
 
 
 @router.put("/json/{problem_id}", response_model=Problem)
-async def update_problem_handler(problem_id: int, problem: ProblemUpdate):
+async def update_problem(problem_id: int, problem: ProblemUpdate):
     try:
         return await problem_service.update_problem_by_id(problem_id, problem)
     except asyncpg.exceptions.UniqueViolationError:
@@ -232,7 +232,7 @@ async def update_problem_handler(problem_id: int, problem: ProblemUpdate):
 
 
 @router.delete("/json/{problem_id}")
-async def delete_problem_handler(problem_id: int):
+async def delete_problem(problem_id: int):
     return await problem_service.delete_problem_by_id(problem_id)
 
 

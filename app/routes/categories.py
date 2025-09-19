@@ -54,20 +54,20 @@ JSON Endpoints
 """
 
 @router.get("/json", response_model=list[Category])
-async def get_categories_handler():
+async def get_categories():
     return await category_service.list_categories()
 
 
 @router.post("/json", response_model=Category)
-async def create_category_handler(category: Category):
+async def create_category(category: Category):
     return await category_service.create_category(category)
  
     
 @router.put("/json/{category_id}", response_model=Category)
-async def update_category_handler(category_id: int, category: Category): 
+async def update_category(category_id: int, category: Category): 
     return await category_service.update_category_by_id(category_id, category)
 
     
 @router.delete("/json/{category_id}")
-async def delete_category_handler(category_id: int):
+async def delete_category(category_id: int):
     return await category_service.delete_category_by_id(category_id)

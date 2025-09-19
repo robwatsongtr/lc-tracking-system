@@ -5,6 +5,6 @@ from services import difficulty_service
 router = APIRouter(prefix="/difficulties", tags=["Difficulties"])
 
 @router.get("/json", response_model=list[Difficulty])
-async def get_difficulties_handler():
+async def get_difficulties():
     return await difficulty_service.list_difficulties()
 
