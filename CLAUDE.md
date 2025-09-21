@@ -3,7 +3,18 @@
 ## Project Overview
 LeetCode Tracking System - FastAPI + PostgreSQL application for tracking completed LeetCode problems.
 
+**Virtual Environment**: `lc-tracking-system/` (exclude from code analysis)
+
 ## Development Commands
+
+### Virtual Environment
+```bash
+# Activate virtual environment
+source lc-tracking-system/bin/activate
+
+# Deactivate virtual environment
+deactivate
+```
 
 ### Running the Application
 ```bash
